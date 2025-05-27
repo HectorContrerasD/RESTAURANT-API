@@ -9,7 +9,7 @@ public partial class Mesa
 
     public int Numero { get; set; }
 
-    public bool? Activa { get; set; }
+    public bool? Disponible { get; set; }
 
     public virtual ICollection<Ticket> Ticket { get; set; } = new List<Ticket>();
 }

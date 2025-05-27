@@ -30,7 +30,6 @@ public partial class RestaurantContext : DbContext
 
     public virtual DbSet<Variante> Variante { get; set; }
 
-  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -44,7 +43,6 @@ public partial class RestaurantContext : DbContext
             entity.ToTable("categoria");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Nombre)
@@ -61,12 +59,11 @@ public partial class RestaurantContext : DbContext
             entity.HasIndex(e => e.Numero, "numero").IsUnique();
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
-            entity.Property(e => e.Activa)
+            entity.Property(e => e.Disponible)
                 .HasDefaultValueSql("'1'")
-                .HasColumnName("activa");
+                .HasColumnName("disponible");
             entity.Property(e => e.Numero)
                 .HasColumnType("int(11)")
                 .HasColumnName("numero");
@@ -88,13 +85,13 @@ public partial class RestaurantContext : DbContext
                 .HasColumnName("activo");
             entity.Property(e => e.CategoriaId)
                 .HasColumnType("int(11)")
-                .HasColumnName("categoria_id");
+                .HasColumnName("categoriaId");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(100)
                 .HasColumnName("nombre");
             entity.Property(e => e.PrecioBase)
                 .HasPrecision(8, 2)
-                .HasColumnName("precio_base");
+                .HasColumnName("precioBase");
 
             entity.HasOne(d => d.Categoria).WithMany(p => p.Producto)
                 .HasForeignKey(d => d.CategoriaId)
@@ -113,7 +110,6 @@ public partial class RestaurantContext : DbContext
             entity.HasIndex(e => e.MeseroId, "ticket_usuario_FK");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.CreatedAt)
@@ -125,10 +121,10 @@ public partial class RestaurantContext : DbContext
                 .HasColumnName("estado");
             entity.Property(e => e.MesaId)
                 .HasColumnType("int(11)")
-                .HasColumnName("mesa_id");
+                .HasColumnName("mesaId");
             entity.Property(e => e.MeseroId)
                 .HasColumnType("int(11)")
-                .HasColumnName("mesero_id");
+                .HasColumnName("meseroId");
             entity.Property(e => e.Total)
                 .HasPrecision(10, 2)
                 .HasDefaultValueSql("'0.00'")
@@ -161,7 +157,6 @@ public partial class RestaurantContext : DbContext
             entity.HasIndex(e => e.VarianteId, "ticket_item_variante_FK");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Activo)
@@ -185,22 +180,22 @@ public partial class RestaurantContext : DbContext
                 .HasColumnName("notas");
             entity.Property(e => e.PrecioUnitario)
                 .HasPrecision(10)
-                .HasColumnName("precio_unitario");
+                .HasColumnName("precioUnitario");
             entity.Property(e => e.ProductoId)
                 .HasColumnType("int(11)")
-                .HasColumnName("producto_id");
+                .HasColumnName("productoId");
             entity.Property(e => e.Subtotal)
                 .HasPrecision(10)
                 .HasColumnName("subtotal");
             entity.Property(e => e.TicketId)
                 .HasColumnType("int(11)")
-                .HasColumnName("ticket_id");
+                .HasColumnName("ticketId");
             entity.Property(e => e.UpdatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("updated_at");
             entity.Property(e => e.VarianteId)
                 .HasColumnType("int(11)")
-                .HasColumnName("variante_id");
+                .HasColumnName("varianteId");
 
             entity.HasOne(d => d.Producto).WithMany(p => p.TicketItem)
                 .HasForeignKey(d => d.ProductoId)
@@ -226,7 +221,6 @@ public partial class RestaurantContext : DbContext
             entity.HasIndex(e => e.Username, "username").IsUnique();
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Activo)
@@ -255,7 +249,6 @@ public partial class RestaurantContext : DbContext
             entity.HasIndex(e => e.ProductoId, "variante_producto_FK");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.Activo)
@@ -270,7 +263,7 @@ public partial class RestaurantContext : DbContext
                 .HasColumnName("precioAdicional");
             entity.Property(e => e.ProductoId)
                 .HasColumnType("int(11)")
-                .HasColumnName("producto_id");
+                .HasColumnName("productoId");
 
             entity.HasOne(d => d.Producto).WithMany(p => p.Variante)
                 .HasForeignKey(d => d.ProductoId)

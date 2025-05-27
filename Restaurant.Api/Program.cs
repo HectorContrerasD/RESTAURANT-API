@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Restaurant.Api.Models.Entities;
+using Restaurant.Api.Repositories;
+using Restaurant.Api.Repositories.Abstractions;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -57,6 +59,11 @@ public static class Extensions
                 ValidateLifetime = true
             };
         });
+        return builder;
+    }
+    public static WebApplicationBuilder AddRepositories(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddTransient<IUserRepository, UserRepository>();
         return builder;
     }
 }
