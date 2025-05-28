@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Api.Models.Entities;
+using Restaurant.Api.Repositories.Abstractions;
 
 namespace Restaurant.Api.Repositories
 {
-    public class MesaRepository(RestaurantContext dbContext) : Repository<Mesa>(dbContext)
+    public class MesaRepository(RestaurantContext dbContext) : Repository<Mesa>(dbContext), IMesaRepository
     {
         public async Task<List<Mesa>> GetMesasDisponiblesAsync()
         {

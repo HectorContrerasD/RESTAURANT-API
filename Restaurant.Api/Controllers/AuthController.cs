@@ -19,7 +19,7 @@ namespace Restaurant.Api.Controllers
             var validator = new LoginValidator();
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid) return BadRequest(validation.Errors.ToPayload());
-            var user = await userRepository.GetUsuarioAsync(request.UserName);
+            var user = await userRepository.GetUsuarioAsync(request.Username);
             if (user == null || request.Password.ToSha512String() != user.Password) return Unauthorized();
             if (!int.TryParse(configuration["Session:AccessTTL"], out int access_ttl))
             {
@@ -30,19 +30,6 @@ namespace Restaurant.Api.Controllers
                     new(Claims.Username, user.Username),
                     new(Claims.Role, user.Rol) };
             var access_token = jwtService.CreateToken(access_claims, TimeSpan.FromMinutes(access_ttl));
-            if (!int.TryParse(configuration["Session:RefreshTTL"], out int refresh_ttl))
-            {
-                refresh_ttl = Constants.DefaultRefreshTTL;
-            }
-            var refresh_claims = new Claim[] { };
-            var refresh_token = jwtService.CreateToken(refresh_claims, TimeSpan.FromDays(refresh_ttl));
-            Response.Cookies.Append("refresh_token", refresh_token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None,
-                Expires = DateTimeOffset.UtcNow.AddDays(refresh_ttl)
-            });
             return Ok(new AuthPayload
             {
                 AccessToken = access_token,

@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Restaurant.Api.Services.Abstractions;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace Restaurant.Api.Services
 {
-    public class JwtService(IConfiguration configuration)
+    public class JwtService(IConfiguration configuration):IJwtService
     {
         public string CreateToken(IEnumerable<Claim>claims, TimeSpan ttl)
         {
