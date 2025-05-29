@@ -20,6 +20,7 @@ namespace Restaurant.Api.Controllers
                 {
                     items = mesas.Select(mesa => new
                     {
+                        mesa.Id,
                         mesa.Numero
                     })
                 };

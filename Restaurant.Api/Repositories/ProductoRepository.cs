@@ -11,5 +11,10 @@ namespace Restaurant.Api.Repositories
             var productos = await DbSet.Where(x => x.CategoriaId == categoriaId).ToListAsync();
             return productos;
         }
+        public async Task<Producto?> GetProductoByIdAsync(int productoId)
+        {
+            var producto = await DbSet.FirstOrDefaultAsync(x=>x.Id == productoId);
+            return producto;
+        }
     }
 }
