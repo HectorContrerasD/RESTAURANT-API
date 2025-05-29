@@ -23,8 +23,6 @@ public partial class TicketItem
 
     public bool? Activo { get; set; }
 
-    public int? CocineroId { get; set; }
-
     public string? Notas { get; set; }
 
     public DateTime? CreatedAt { get; set; }

@@ -166,9 +166,6 @@ public partial class RestaurantContext : DbContext
                 .HasDefaultValueSql("'1'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cantidad");
-            entity.Property(e => e.CocineroId)
-                .HasColumnType("int(11)")
-                .HasColumnName("cocinero_id");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
