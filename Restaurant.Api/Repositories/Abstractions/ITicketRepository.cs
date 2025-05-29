@@ -12,6 +12,6 @@ namespace Restaurant.Api.Repositories.Abstractions
         public  Task<List<Ticket>> GetAllTicketsAbiertosAsync();
 
         public Task<List<Ticket>> GetAllTicketsCanceladosAsync();
-       
+        public Task<List<Ticket>> GetAllTicketsByUserIdAsync(int id);
     }
 }

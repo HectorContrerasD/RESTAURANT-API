@@ -36,5 +36,12 @@ namespace Restaurant.Api.Repositories
                 .Include(x => x.TicketItem).ThenInclude(x => x.Variante).Where(x => x.Estado == Constants.Cancelado).ToListAsync();
             return tickets;
         }
+        public async Task<List<Ticket>> GetAllTicketsByUserIdAsync(int id)
+        {
+            var tickets = await DbSet.Include(x => x.Mesa).Include(x => x.Mesero)
+                .Include(x => x.TicketItem).ThenInclude(x => x.Producto)
+                .Include(x => x.TicketItem).ThenInclude(x => x.Variante).Where(x => x.MeseroId == id).ToListAsync();
+            return tickets;
+        }
     }
 }
