@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Restaurant.Api.Models.Entities;
 using Restaurant.Api.Payloads;
 using Restaurant.Api.Repositories.Abstractions;
 using Restaurant.Api.Services.Utils;
@@ -9,7 +10,7 @@ namespace Restaurant.Api.Controllers
 {
     [Route("api/ticket")]
 
-    public class TicketController(ITicketRepository ticketRepository, ITicketItemRepository ticketItemRepository, IUserRepository userRepository) : ControllerBase
+    public class TicketController(ITicketRepository ticketRepository, IMesaRepository mesaRepository, IProductoRepository productoRepository, ITicketItemRepository ticketItemRepository, IUserRepository userRepository) : ControllerBase
     {
         [HttpGet("propio")]
         public async Task<IActionResult> GetOpenTickets()
@@ -254,8 +255,25 @@ namespace Restaurant.Api.Controllers
                 {
                     return Unauthorized();
                 }
-                return null;
+                
 
+                var mesa = await mesaRepository.GetMesaByIdAsync((int)ticketPayload.MesaId);
+                if (mesa == null)
+                    return NotFound();
+                var ticket = new Ticket
+                {
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    MesaId = mesa.Id,
+                    MeseroId = user.Id,
+                    Estado = Constants.Abierto,
+                    Total = 0
+                };
+                await ticketRepository.InsertAsync(ticket);
+
+                
+
+                return Ok(ticket.Id);
 
             }
             catch (Exception error)
@@ -263,5 +281,6 @@ namespace Restaurant.Api.Controllers
                 return Problem(error.Message);
             }
         }
+        
     }
 }

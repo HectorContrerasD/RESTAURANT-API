@@ -30,6 +30,7 @@ public partial class RestaurantContext : DbContext
 
     public virtual DbSet<Variante> Variante { get; set; }
 
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder

@@ -3,7 +3,7 @@ using Restaurant.Api.Models.Entities;
 
 namespace Restaurant.Api.Repositories.Abstractions
 {
-    public interface ICategoriaRepository
+    public interface ICategoriaRepository: IRepository<Categoria>
     {
         public Task<List<Categoria>> GetCategoriasAsync();
 

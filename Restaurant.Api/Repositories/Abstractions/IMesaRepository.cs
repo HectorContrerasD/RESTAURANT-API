@@ -3,7 +3,7 @@ using Restaurant.Api.Models.Entities;
 
 namespace Restaurant.Api.Repositories.Abstractions
 {
-    public interface IMesaRepository
+    public interface IMesaRepository:IRepository<Mesa>
     {
         public Task<List<Mesa>> GetMesasDisponiblesAsync();
 
