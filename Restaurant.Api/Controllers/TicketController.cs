@@ -263,7 +263,7 @@ namespace Restaurant.Api.Controllers
                 }
                 
 
-                var mesa = await mesaRepository.GetMesaByIdAsync((int)ticketPayload.MesaId);
+                var mesa = await mesaRepository.GetMesaByIdAsync((int)ticketPayload.MesaId!);
                 if (mesa == null)
                     return NotFound();
                 var validator = new TicketValidator();
@@ -281,7 +281,7 @@ namespace Restaurant.Api.Controllers
                 var itemsCreados = new List<TicketItem>();
                 await ticketRepository.InsertAsync(ticket);
                 decimal totalTicket = 0;
-                foreach (var item in ticketPayload.TicketItems)
+                foreach (var item in ticketPayload.TicketItems!)
                 {
                     var ticketItem = await ProcesarItem(ticket.Id, item);
                     itemsCreados.Add(ticketItem);
