@@ -328,5 +328,45 @@ namespace Restaurant.Api.Controllers
             await ticketItemRepository.InsertAsync(ticketItem);
             return ticketItem;
         }
+        [HttpPut("{id}/cerrar")] //para cerrar un ticket (para cocinero)
+        public async Task<IActionResult> CloseTicket([FromRoute] int id)
+        {
+            try
+            {
+                var ticket = await ticketRepository.GetTicketByIdAsync(id);
+                if (ticket == null)
+                    return NotFound();
+                if (ticket.Estado != Constants.Abierto)
+                    return BadRequest("El ticket no está abierto");
+                ticket.Estado = Constants.Cerrado;
+                ticket.UpdatedAt = DateTime.UtcNow;
+                await ticketRepository.UpdateAsync(ticket);
+                return Ok();
+            }
+            catch (Exception error)
+            {
+                return Problem(error.Message);
+            }
+        }
+        [HttpPut("{id}/cancelar")] //para cancelar un ticket (para mesero)
+        public async Task<IActionResult> CancelTicket([FromRoute] int id)
+        {
+            try
+            {
+                var ticket = await ticketRepository.GetTicketByIdAsync(id);
+                if (ticket == null)
+                    return NotFound();
+                if (ticket.Estado != Constants.Abierto)
+                    return BadRequest("El ticket no está abierto");
+                ticket.Estado = Constants.Cancelado;
+                ticket.UpdatedAt = DateTime.UtcNow;
+                await ticketRepository.UpdateAsync(ticket);
+                return Ok();
+            }
+            catch (Exception error)
+            {
+                return Problem(error.Message);
+            }
+        }
     }
 }
