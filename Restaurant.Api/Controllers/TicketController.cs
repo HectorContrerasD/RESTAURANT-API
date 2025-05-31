@@ -11,7 +11,12 @@ namespace Restaurant.Api.Controllers
 {
     [Route("api/ticket")]
 
-    public class TicketController(ITicketRepository ticketRepository, IMesaRepository mesaRepository, IProductoRepository productoRepository, ITicketItemRepository ticketItemRepository, IUserRepository userRepository) : ControllerBase
+    public class TicketController(ITicketRepository ticketRepository,
+        IVarianteRepository varianteRepository,
+        IMesaRepository mesaRepository, 
+        IProductoRepository productoRepository, 
+        ITicketItemRepository ticketItemRepository, 
+        IUserRepository userRepository) : ControllerBase
     {
         [HttpGet("propio")]
         public async Task<IActionResult> GetOpenTickets()
@@ -273,18 +278,53 @@ namespace Restaurant.Api.Controllers
                     Estado = Constants.Abierto,
                     Total = 0
                 };
+                var itemsCreados = new List<TicketItem>();
                 await ticketRepository.InsertAsync(ticket);
-
-                
+                decimal totalTicket = 0;
+                foreach (var item in ticketPayload.TicketItems)
+                {
+                    var ticketItem = await ProcesarItem(ticket.Id, item);
+                    itemsCreados.Add(ticketItem);
+                    totalTicket += ticketItem.Subtotal;
+                }
 
                 return Ok(ticket.Id);
-
             }
             catch (Exception error)
             {
                 return Problem(error.Message);
             }
         }
-        
+
+        private async Task<TicketItem> ProcesarItem(int id, TicketItemPayload item)
+        {
+            var producto = await productoRepository.GetProductoByIdAsync((int)item.ProductoId!);
+            if (producto == null)
+                throw new Exception("Producto no encontrado");
+            decimal precioUnitario = producto.PrecioBase;
+            if (item.VarianteId.HasValue)
+            {
+                var variante = await varianteRepository.GetByIdAsync((int)item.VarianteId);
+                if (variante == null)
+                    throw new Exception("Variante no encontrada");
+                precioUnitario += (decimal)variante.PrecioAdicional!;
+            }
+            int cantidad = item.Cantidad ?? 1;
+            decimal subtotal = precioUnitario * cantidad;
+            var ticketItem = new TicketItem
+            {
+                ProductoId = producto.Id,
+                VarianteId = item.VarianteId,
+                PrecioUnitario = precioUnitario,
+                Cantidad = cantidad,
+                Notas = item.Notas,
+                Subtotal = subtotal,
+                TicketId = id,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            await ticketItemRepository.InsertAsync(ticketItem);
+            return ticketItem;
+        }
     }
 }

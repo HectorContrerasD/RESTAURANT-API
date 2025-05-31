@@ -29,6 +29,8 @@ namespace Restaurant.Api.Payloads
         public int? VarianteId { get; set; }
         public decimal? Precio { get; set; }
         public int? Cantidad { get; set; }
+
+        public string? Notas { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
