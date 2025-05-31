@@ -8,7 +8,7 @@ namespace Restaurant.Api.Controllers
    
     public class CategoriaController(ICategoriaRepository categoriaRepository) : ControllerBase
     {
-        [HttpGet]
+        [HttpGet]// obtiene todas las categorías (para mesero)
         public async Task<IActionResult> GetCategoriasAsync()
         {
             try

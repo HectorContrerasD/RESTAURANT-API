@@ -18,7 +18,8 @@ namespace Restaurant.Api.Controllers
         ITicketItemRepository ticketItemRepository, 
         IUserRepository userRepository) : ControllerBase
     {
-        [HttpGet("propio")]
+
+        [HttpGet("/abierto/mesero")] //Obtiene los tickets abiertos del mesero
         public async Task<IActionResult> GetOpenTickets()
         {
             try
@@ -83,7 +84,8 @@ namespace Restaurant.Api.Controllers
                 return Problem(error.Message);
             }
         }
-        [HttpGet("abierto")]
+
+        [HttpGet("abierto")] //Obtiene todos los tickets abiertos (para cocineros)
         public async Task<IActionResult> GetTicketsAbiertos()
         {
             try
@@ -138,7 +140,7 @@ namespace Restaurant.Api.Controllers
             }
 
         }
-        [HttpGet("cerrado")]
+        [HttpGet("cerrado")] //Obtiene todos los tickets cerrados (para cocineros)
         public async Task<IActionResult> GetTicketsCerrados()
         {
             try
@@ -193,7 +195,7 @@ namespace Restaurant.Api.Controllers
             }
         }
         [HttpGet("cancelado")]
-        public async Task<IActionResult> GetTicketsCancelados()
+        public async Task<IActionResult> GetTicketsCancelados() //Obtiene todos los tickets cancelados (para cocineros)
         {
             try
             {
@@ -247,7 +249,7 @@ namespace Restaurant.Api.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateTicket([FromBody] TicketPayload ticketPayload)
+        public async Task<IActionResult> CreateTicket([FromBody] TicketPayload ticketPayload) // Crea un nuevo ticket (para mesero)
         {
             try
             {
@@ -295,7 +297,7 @@ namespace Restaurant.Api.Controllers
                 return Problem(error.Message);
             }
         }
-        [HttpGet("ProcesarTicket")]
+        [HttpGet("ProcesarTicket")] // Procesa un ticket (para cocinero) no se llama, es un método privado para procesar los items del ticket y que swagger muestre todos los métodos
         private async Task<TicketItem> ProcesarItem(int id, TicketItemPayload item)
         {
             var producto = await productoRepository.GetProductoByIdAsync((int)item.ProductoId!);

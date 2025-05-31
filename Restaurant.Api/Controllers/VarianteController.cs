@@ -8,7 +8,7 @@ namespace Restaurant.Api.Controllers
 
     public class VarianteController(IVarianteRepository varianteRepository, IProductoRepository productoRepository) : ControllerBase
     {
-        [HttpGet("producto/{id}")]
+        [HttpGet("producto/{id}")] // obtiene las variantes por el ID del producto (para mesero)
         public async Task<IActionResult> GetVariantesByProductoAsync([FromRoute] int id)
         {
             try

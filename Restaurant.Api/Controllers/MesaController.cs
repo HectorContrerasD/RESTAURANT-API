@@ -10,7 +10,7 @@ namespace Restaurant.Api.Controllers
 
     public class MesaController(IMesaRepository mesaRepository ) : ControllerBase
     {
-        [HttpGet]
+        [HttpGet]// obtiene todas las mesas disponibles (para mesero)
         public async Task <IActionResult> GetMesaList()
         {
             try

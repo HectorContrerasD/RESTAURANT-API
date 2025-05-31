@@ -8,7 +8,7 @@ namespace Restaurant.Api.Controllers
 
     public class ProductoController(IProductoRepository productoRepository, ICategoriaRepository categoriaRepository) : ControllerBase
     {
-        [HttpGet("{id}")]
+        [HttpGet("{id}")] // obtiene los productos por el ID de la categoria (para mesero)
         public async Task<IActionResult> GetPriductosByCategoriaAsync([FromRoute] int id)
         {
             try
