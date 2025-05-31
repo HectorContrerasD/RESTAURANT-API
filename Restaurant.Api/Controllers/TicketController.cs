@@ -295,7 +295,7 @@ namespace Restaurant.Api.Controllers
                 return Problem(error.Message);
             }
         }
-
+        [HttpGet("ProcesarTicket")]
         private async Task<TicketItem> ProcesarItem(int id, TicketItemPayload item)
         {
             var producto = await productoRepository.GetProductoByIdAsync((int)item.ProductoId!);
