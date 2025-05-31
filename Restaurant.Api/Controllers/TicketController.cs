@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Restaurant.Api.Models.Entities;
 using Restaurant.Api.Payloads;
 using Restaurant.Api.Repositories.Abstractions;
+using Restaurant.Api.Repositories.Validators;
 using Restaurant.Api.Services.Utils;
 
 namespace Restaurant.Api.Controllers
@@ -260,6 +261,9 @@ namespace Restaurant.Api.Controllers
                 var mesa = await mesaRepository.GetMesaByIdAsync((int)ticketPayload.MesaId);
                 if (mesa == null)
                     return NotFound();
+                var validator = new TicketValidator();
+                var validation = await validator.ValidateAsync(ticketPayload);
+                if (!validation.IsValid) return BadRequest(validation.Errors.ToPayload());
                 var ticket = new Ticket
                 {
                     CreatedAt = DateTime.UtcNow,
