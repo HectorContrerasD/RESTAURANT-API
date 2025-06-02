@@ -19,7 +19,7 @@ namespace Restaurant.Api.Controllers
         IUserRepository userRepository) : ControllerBase
     {
 
-        [HttpGet("/abierto/mesero")] //Obtiene los tickets abiertos del mesero
+        [HttpGet("abierto/mesero")] //Obtiene los tickets abiertos del mesero
         public async Task<IActionResult> GetOpenTickets()
         {
             try

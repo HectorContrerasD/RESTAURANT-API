@@ -14,7 +14,7 @@ namespace Restaurant.Api.Repositories.Validators
             RuleFor(x => x.Cantidad)
                 .NotNull().WithMessage("Cantidad is required.")
                 .GreaterThan(0).WithMessage("Cantidad must be greater than 0.");
-            RuleFor(x=>x.Precio)
+            RuleFor(x => x.Precio);
         }
     }
 }
