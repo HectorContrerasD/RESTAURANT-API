@@ -26,10 +26,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(x => x.WithOrigins(builder.Configuration.GetSection("AllowedDomains").Get<string[]>()!)
-                  .AllowAnyMethod()
-                  .AllowAnyHeader()
-                  .AllowCredentials());
+app.UseCors(x => { x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); });
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
