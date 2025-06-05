@@ -32,7 +32,7 @@ public partial class RestaurantContext : DbContext
 
     public virtual DbSet<Variante> Variante { get; set; }
 
-  
+   
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -138,7 +138,7 @@ public partial class RestaurantContext : DbContext
                 .HasColumnName("created_at");
             entity.Property(e => e.Estado)
                 .HasDefaultValueSql("'abierto'")
-                .HasColumnType("enum('abierto','cerrado','cancelado')")
+                .HasColumnType("enum('abierto','terminado','cerrado','cancelado')")
                 .HasColumnName("estado");
             entity.Property(e => e.MesaId)
                 .HasColumnType("int(11)")

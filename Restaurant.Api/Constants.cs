@@ -7,8 +7,7 @@
         public const string Abierto = "abierto";
         public const string Cerrado = "cerrado";
         public const string Cancelado = "cancelado";
-        public const string Pendiente = "pendiente";
-        public const string Preparacion = "preparacion";
+       
         public const string Listo = "listo";
         public const string Admin = "admin";
         public const string Mesero = "mesero";

@@ -287,7 +287,10 @@ namespace Restaurant.Api.Controllers
                     totalTicket += ticketItem.Subtotal;
                 }
                 ticket.Total = totalTicket;
+
                 await ticketRepository.UpdateAsync(ticket);
+                mesa.Disponible = false;
+                await mesaRepository.UpdateAsync(mesa);
                 return Ok(ticket.Id);
             }
             catch (Exception error)
@@ -333,11 +336,16 @@ namespace Restaurant.Api.Controllers
                 var ticket = await ticketRepository.GetTicketByIdAsync(id);
                 if (ticket == null)
                     return NotFound();
-                if (ticket.Estado != Constants.Abierto)
-                    return BadRequest("El ticket no está abierto");
+                if (ticket.Estado != Constants.Listo)
+                    return BadRequest("El pedido aun no esta listo");
                 ticket.Estado = Constants.Cerrado;
                 ticket.UpdatedAt = DateTime.UtcNow;
+                var mesa = await mesaRepository.GetMesaByIdAsync(ticket.MesaId);
+                if (mesa == null)
+                    return NotFound("Mesa no encontrada");
+                mesa.Disponible = true; // Marcar la mesa como disponible
                 await ticketRepository.UpdateAsync(ticket);
+                await mesaRepository.UpdateAsync(mesa);
                 return Ok();
             }
             catch (Exception error)
@@ -365,5 +373,27 @@ namespace Restaurant.Api.Controllers
                 return Problem(error.Message);
             }
         }
+        [HttpPut("{id}/listo")] //para cancelar un ticket (para mesero)
+        public async Task<IActionResult> TicketListo([FromRoute] int id) //no se como traducirlo
+        {
+            try
+            {
+                var ticket = await ticketRepository.GetTicketByIdAsync(id);
+                if (ticket == null)
+                    return NotFound();
+                if (ticket.Estado != Constants.Abierto)
+                    return BadRequest("El ticket no está abierto");
+                ticket.Estado = Constants.Cancelado;
+                ticket.UpdatedAt = DateTime.UtcNow;
+                await ticketRepository.UpdateAsync(ticket);
+                return Ok();
+            }
+            catch (Exception error)
+            {
+                return Problem(error.Message);
+            }
+        }
     }
 }
+
+
