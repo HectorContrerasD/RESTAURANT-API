@@ -27,6 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors(x => { x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); });
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
@@ -74,7 +75,9 @@ public static class Extensions
             .AddTransient<IMesaRepository,MesaRepository>()
             .AddTransient<IProductoRepository, ProductoRepository>()
             .AddTransient<ITicketRepository, TicketRepository>()
-            .AddTransient<IVarianteRepository, VarianteRepository>();
+            .AddTransient<IVarianteRepository, VarianteRepository>()
+            .AddTransient<ITicketItemRepository, TicketItemsRepository>()
+            .AddTransient<ISesionRepository, SesionRepository>();
         return builder;
     }
 }

@@ -19,15 +19,7 @@ public partial class TicketItem
 
     public decimal Subtotal { get; set; }
 
-    public string Estado { get; set; } = null!;
-
-    public bool? Activo { get; set; }
-
     public string? Notas { get; set; }
-
-    public DateTime? CreatedAt { get; set; }
-
-    public DateTime? UpdatedAt { get; set; }
 
     public virtual Producto Producto { get; set; } = null!;
 

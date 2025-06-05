@@ -13,5 +13,12 @@ namespace Restaurant.Api.Services.Utils
             var result = string.Join("", hash.Select(x => x.ToString("x2")));
             return result;  
         }
+        public static string ToSHA256String(this string @string)
+        {
+            var data = Encoding.UTF8.GetBytes(@string);
+            var hash = SHA256.HashData(data);
+            var result = string.Join("", hash.Select(x => x.ToString("x2")));
+            return result;
+        }
     }
 }

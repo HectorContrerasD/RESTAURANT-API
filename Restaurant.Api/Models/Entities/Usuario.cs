@@ -17,5 +17,7 @@ public partial class Usuario
 
     public bool? Activo { get; set; }
 
+    public virtual ICollection<Sesion> Sesion { get; set; } = new List<Sesion>();
+
     public virtual ICollection<Ticket> Ticket { get; set; } = new List<Ticket>();
 }

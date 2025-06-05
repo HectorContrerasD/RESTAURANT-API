@@ -22,6 +22,8 @@ public partial class RestaurantContext : DbContext
 
     public virtual DbSet<Producto> Producto { get; set; }
 
+    public virtual DbSet<Sesion> Sesion { get; set; }
+
     public virtual DbSet<Ticket> Ticket { get; set; }
 
     public virtual DbSet<TicketItem> TicketItem { get; set; }
@@ -30,7 +32,7 @@ public partial class RestaurantContext : DbContext
 
     public virtual DbSet<Variante> Variante { get; set; }
 
-    
+  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -100,6 +102,24 @@ public partial class RestaurantContext : DbContext
                 .HasConstraintName("producto_categoria_FK");
         });
 
+        modelBuilder.Entity<Sesion>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("sesion");
+
+            entity.HasIndex(e => e.UsuarioId, "sesion_usuario_FK");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.Hash).HasMaxLength(64);
+            entity.Property(e => e.UsuarioId).HasColumnType("int(11)");
+
+            entity.HasOne(d => d.Usuario).WithMany(p => p.Sesion)
+                .HasForeignKey(d => d.UsuarioId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("sesion_usuario_FK");
+        });
+
         modelBuilder.Entity<Ticket>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -160,19 +180,10 @@ public partial class RestaurantContext : DbContext
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
-            entity.Property(e => e.Activo)
-                .HasDefaultValueSql("'1'")
-                .HasColumnName("activo");
             entity.Property(e => e.Cantidad)
                 .HasDefaultValueSql("'1'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cantidad");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnType("datetime")
-                .HasColumnName("created_at");
-            entity.Property(e => e.Estado)
-                .HasColumnType("enum('pendiente','preparacion','listo')")
-                .HasColumnName("estado");
             entity.Property(e => e.Notas)
                 .HasColumnType("text")
                 .HasColumnName("notas");
@@ -188,9 +199,6 @@ public partial class RestaurantContext : DbContext
             entity.Property(e => e.TicketId)
                 .HasColumnType("int(11)")
                 .HasColumnName("ticketId");
-            entity.Property(e => e.UpdatedAt)
-                .HasColumnType("datetime")
-                .HasColumnName("updated_at");
             entity.Property(e => e.VarianteId)
                 .HasColumnType("int(11)")
                 .HasColumnName("varianteId");

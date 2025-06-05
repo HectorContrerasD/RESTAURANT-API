@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Restaurant.Api.Models.Entities;
@@ -18,7 +19,7 @@ namespace Restaurant.Api.Controllers
         ITicketItemRepository ticketItemRepository, 
         IUserRepository userRepository) : ControllerBase
     {
-
+        [Authorize]
         [HttpGet("abierto/mesero")] //Obtiene los tickets abiertos del mesero
         public async Task<IActionResult> GetOpenTickets()
         {
@@ -70,13 +71,12 @@ namespace Restaurant.Api.Controllers
                         } : null,
                         item.PrecioUnitario,
                         item.Cantidad,
-                        item.CreatedAt,
-                        item.UpdatedAt,
+                       
                         item.Notas,
                         item.Subtotal
                     }).ToList()
                 });
-                return Ok(tickets);
+                return Ok(response);
 
             }
             catch (Exception error)
@@ -126,13 +126,12 @@ namespace Restaurant.Api.Controllers
                         } : null,
                         item.PrecioUnitario,
                         item.Cantidad,
-                        item.CreatedAt,
-                        item.UpdatedAt,
+                       
                         item.Notas,
                         item.Subtotal
                     }).ToList()
                 });
-                return Ok(tickets);
+                return Ok(response);
             }
             catch (Exception error)
             {
@@ -181,13 +180,12 @@ namespace Restaurant.Api.Controllers
                         } : null,
                         item.PrecioUnitario,
                         item.Cantidad,
-                        item.CreatedAt,
-                        item.UpdatedAt,
+                      
                         item.Notas,
                         item.Subtotal
                     }).ToList()
                 });
-                return Ok(tickets);
+                return Ok(response);
             }
             catch (Exception error)
             {
@@ -235,19 +233,18 @@ namespace Restaurant.Api.Controllers
                         } : null,
                         item.PrecioUnitario,
                         item.Cantidad,
-                        item.CreatedAt,
-                        item.UpdatedAt,
                         item.Notas,
                         item.Subtotal
                     }).ToList()
                 });
-                return Ok(tickets);
+                return Ok(response);
             }
             catch (Exception error)
             {
                 return Problem(error.Message);
             }
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] TicketPayload ticketPayload) // Crea un nuevo ticket (para mesero)
         {
@@ -289,7 +286,8 @@ namespace Restaurant.Api.Controllers
                     itemsCreados.Add(ticketItem);
                     totalTicket += ticketItem.Subtotal;
                 }
-
+                ticket.Total = totalTicket;
+                await ticketRepository.UpdateAsync(ticket);
                 return Ok(ticket.Id);
             }
             catch (Exception error)
@@ -322,8 +320,7 @@ namespace Restaurant.Api.Controllers
                 Notas = item.Notas,
                 Subtotal = subtotal,
                 TicketId = id,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+              
             };
             await ticketItemRepository.InsertAsync(ticketItem);
             return ticketItem;
