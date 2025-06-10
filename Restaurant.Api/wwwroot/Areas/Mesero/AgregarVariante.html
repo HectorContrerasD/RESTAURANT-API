@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="/CSS/StyleMesero.css">
+
+</head>
+<body>
+    <div class="contenedor">
+        <h1>Agregar variante</h1>
+        <div class="producto-seleccionado" id="productoNombre">Producto seleccionado</div>
+
+        <div class="producto2">
+            <img src="/Assets/HamConQueso.jpeg" class="producto-img" alt="Producto">
+            <div class="producto-seleccionado" id="productoNombre">Con queso</div>
+
+
+        </div>
+
+        <form class="variante-form" action="FinalizarPedido.html">
+            <label><input type="checkbox" name="variante" value="sin-cebolla"> Sin cebolla</label>
+            <label><input type="checkbox" name="variante" value="extra-queso"> Extra queso</label>
+            <label><input type="checkbox" name="variante" value="pan-ajonjoli"> Sin ajonjolí</label>
+
+            <div class="boton-grupo">
+                <a href="AgregarProducto.html" class="boton-secundario">Anterior</a>
+                <button type="submit" class="boton-secundario">Agregar al pedido</button>
+            </div>
+        </form>
+    </div>
+
+    <!--<script>
+        const params = new URLSearchParams(window.location.search);
+        const producto = params.get('producto');
+        const nombreElem = document.getElementById('productoNombre');
+        const imagenElem = document.getElementById('productoImg');
+
+        if (producto) {
+            const nombre = decodeURIComponent(producto).replace('-', ' ');
+            nombreElem.textContent = `${nombre.charAt(0).toUpperCase() + nombre.slice(1)}`;
+
+            let imgSrc = '';
+            if (producto === 'conqueso') imgSrc = '/Assets/HamConQueso.jpeg';
+            else if (producto === 'sencilla') imgSrc = '/Assets/HamSencilla.png';
+            else imgSrc = '/Assets/.png';
+
+            imagenElem.src = imgSrc;
+            imagenElem.style.display = 'block';
+        }
+    </script>-->
+</body>
+</html>

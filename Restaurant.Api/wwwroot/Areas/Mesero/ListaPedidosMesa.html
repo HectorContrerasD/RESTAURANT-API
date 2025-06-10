@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Lista de pedidos</title>
+    <link rel="stylesheet" href="/CSS/StyleMesero.css">
+
+</head>
+<body>
+    <div class="contenedor">
+
+        <div class="header">
+            <img src="/Assets/MenuRestaurante.png" class="menuicono" id="menuToggle" />
+        </div>
+
+        <nav class="menu" id="menuOpciones">
+            <a href="CrearPedido.html">Crear Pedido</a>
+            <a href="ListaPedidosMesa.html">Lista de Pedidos</a>
+            <a href="../../Login.html">Cerrar sesión</a>
+        </nav>
+
+        <h2>Pedidos Activos</h2>
+
+        <div class="pedidos-lista">
+            <div class="pedido">
+                <p><strong>Mesa 3</strong> - 3 productos</p>
+                <div class="boton-grupo">
+                    <a href="VerPedido.html?mesa=3" class="boton-secundario2">Ver</a>
+                    <button class="boton-secundario2" onclick="cancelarPedido(3)">Cancelar</button>
+                </div>
+            </div>
+            <div class="pedido">
+                <p><strong>Mesa 6</strong> - 2 productos</p>
+                <div class="boton-grupo">
+                    <a href="VerPedido.html?mesa=6" class="boton-secundario2">Ver</a>
+                    <button class="boton-secundario2" onclick="cancelarPedido(6)">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('menuToggle');
+        const menu = document.getElementById('menuOpciones');
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target) && e.target !== toggleBtn) {
+                menu.style.display = 'none';
+            }
+        });
+
+        function cancelarPedido(mesa) {
+            const confirmar = confirm(`¿Seguro que quieres cancelar el pedido de la Mesa ${mesa}?`);
+            if (confirmar) {
+                alert(`Pedido de la Mesa ${mesa} cancelado`);
+            }
+        }
+    </script>
+</body>
+</html>

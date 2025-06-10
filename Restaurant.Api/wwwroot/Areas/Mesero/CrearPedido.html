@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Crear pedidos</title>
+    <link rel="stylesheet" href="/CSS/StyleMesero.css">
+</head>
+<body>
+    <div class="contenedor">
+        <div class="header">
+            <!--<img src="/Assets/LogoRestaurante2.png" class="logo" id="menuToggle"/>-->
+
+            <img src="/Assets/MenuRestaurante.png" class="menuicono" id="menuToggle" />
+            <span class="bienvenida">¡Bienvenido/a, mesero/a Carmelita Fernandez!</span>
+        </div>
+
+        <nav class="menu" id="menuOpciones">
+            <a href="CrearPedido.html">Crear Pedido</a>
+            <a href="ListaPedidosMesa.html">Lista de Pedidos</a>
+            <a href="../../Login.html">Cerrar sesión</a>
+        </nav>
+
+        <h1>Crear pedido</h1>
+
+        <h3>Seleccionar mesa</h3>
+
+        <div class="MesasNumero" id="mesasContainer"></div>
+
+        <div class="formulario">
+            <input type="button" value="Nuevo pedido" class="button" id="crearPedido" disabled />
+        </div>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('menuToggle');
+        const menu = document.getElementById('menuOpciones');
+        const mesasContainer = document.getElementById('mesasContainer');
+        const btnCrearPedido = document.getElementById('crearPedido');
+
+        let mesaSeleccionada = null;
+        const mesasNoDisponibles = [3, 6];
+
+        // Abrir/cerrar menú
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target) && e.target !== toggleBtn) {
+                menu.style.display = 'none';
+            }
+        });
+
+        // Crear botones de mesas
+        for (let i = 1; i <= 10; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = i;
+
+            if (mesasNoDisponibles.includes(i)) {
+                btn.classList.add('no-disponible');
+                btn.disabled = true;
+            } else {
+                btn.addEventListener('click', () => {
+                    if (mesaSeleccionada === i) {
+                        mesaSeleccionada = null;
+                        btn.classList.remove('seleccionada');
+                        btnCrearPedido.disabled = true;
+                        btnCrearPedido.classList.remove('activo');
+                    } else {
+                        mesaSeleccionada = i;
+                        document.querySelectorAll('.MesasNumero button').forEach(b => b.classList.remove('seleccionada'));
+                        btn.classList.add('seleccionada');
+                        btnCrearPedido.disabled = false;
+                        btnCrearPedido.classList.add('activo');
+                    }
+                });
+            }
+
+            mesasContainer.appendChild(btn);
+        }
+
+        // Ir a la siguiente página (sin enviar número de mesa)
+        btnCrearPedido.addEventListener('click', () => {
+            if (mesaSeleccionada !== null) {
+                window.location.href = "AgregarCategoria.html"; // sin ?mesa=
+            }
+        });
+    </script>
+</body>
+</html>

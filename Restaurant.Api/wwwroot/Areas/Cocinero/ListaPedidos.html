@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Cocina</title>
+    <link rel="stylesheet" href="/CSS/StyleCocinero.css">
+</head>
+<body>
+    <div class="contenedor">
+
+        <div class="header">
+            <img src="/Assets/MenuRestaurante.png" class="menuicono" id="menuToggle" />
+            <span class="bienvenida">¡Bienvenido/a, cocinero/a Pedrito Fuentes!</span>
+
+        </div>
+
+        <nav class="menu" id="menuOpciones">
+            <a href="../../Login.html">Cerrar sesión</a>
+        </nav>
+
+        <h1>Pedidos en Cocina</h1>
+
+        <div class="barra-estados">
+            <button class="tab-estado activo" data-tab="preparacion">🛠 Preparación</button>
+            <button class="tab-estado" data-tab="terminados">✅ Terminados</button>
+            <button class="tab-estado" data-tab="cancelados">❌ Cancelados</button>
+        </div>
+
+        <div class="pedidos-lista" id="preparacion">
+            <div class="pedido">
+                <p><strong>Mesa 3</strong> - 3 productos</p>
+                <div class="boton-grupo2">
+                    <a href="Detalles.html" class="boton-secundario">Ver</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="pedidos-lista" id="terminados" style="display: none;">
+            <div class="pedido terminado">
+                <p><strong>Mesa 4</strong> - 2 productos</p>
+                <span class="estado-label">✔ Pedido listo</span>
+            </div>
+        </div>
+
+        <div class="pedidos-lista" id="cancelados" style="display: none;">
+            <div class="pedido cancelado">
+                <p><strong>Mesa 7</strong> - 1 producto</p>
+                <span class="estado-label">✖ Cancelado</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('menuToggle');
+        const menu = document.getElementById('menuOpciones');
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target) && e.target !== toggleBtn) {
+                menu.style.display = 'none';
+            }
+        });
+
+        function cancelarPedido(mesa) {
+            const confirmar = confirm(`¿Seguro que quieres cancelar el pedido de la Mesa ${mesa}?`);
+            if (confirmar) {
+                alert(`Pedido de la Mesa ${mesa} cancelado`);
+            }
+        }
+
+        function finalizarPedido(mesa) {
+            alert(`Pedido de la Mesa ${mesa} finalizado`);
+        }
+
+        const tabs = document.querySelectorAll('.tab-estado');
+        const secciones = document.querySelectorAll('.pedidos-lista');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('activo'));
+                tab.classList.add('activo');
+
+                secciones.forEach(sec => sec.style.display = 'none');
+                const target = document.getElementById(tab.dataset.tab);
+                if (target) target.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>
