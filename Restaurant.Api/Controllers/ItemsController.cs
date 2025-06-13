@@ -41,5 +41,37 @@ namespace Restaurant.Api.Controllers
                 return Problem(error.Message);
             }
         }
+        [HttpPut("{id}/preparacion")]
+        public async Task<IActionResult> UpdateItemEnPreparacion([FromRoute] int id)
+        {
+            try
+            {
+                var item = await ticketItemRepository.GetByIdAsync(id);
+                if (item == null) return NotFound();
+                item.Estado = Constants.Preparacion;
+                await ticketItemRepository.UpdateAsync(item);
+                return Ok();
+            }
+            catch (Exception error)
+            {
+                return Problem(error.Message);
+            }
+        }
+        [HttpPut("{id}/listo")]
+        public async Task<IActionResult> UpdateItemListo([FromRoute] int id)
+        {
+            try
+            {
+                var item = await ticketItemRepository.GetByIdAsync(id);
+                if (item == null) return NotFound();
+                item.Estado = Constants.Listo;
+                await ticketItemRepository.UpdateAsync(item);
+                return Ok();
+            }
+            catch (Exception error)
+            {
+                return Problem(error.Message);
+            }
+        }
     }
 }
