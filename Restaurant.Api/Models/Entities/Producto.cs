@@ -15,6 +15,8 @@ public partial class Producto
 
     public bool? Activo { get; set; }
 
+    public bool? ACocina { get; set; }
+
     public virtual Categoria Categoria { get; set; } = null!;
 
     public virtual ICollection<TicketItem> TicketItem { get; set; } = new List<TicketItem>();

@@ -17,8 +17,6 @@ public partial class Ticket
 
     public DateTime? CreatedAt { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
-
     public virtual Mesa Mesa { get; set; } = null!;
 
     public virtual Usuario Mesero { get; set; } = null!;

@@ -32,7 +32,7 @@ public partial class RestaurantContext : DbContext
 
     public virtual DbSet<Variante> Variante { get; set; }
 
-   
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -83,6 +83,7 @@ public partial class RestaurantContext : DbContext
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
+            entity.Property(e => e.ACocina).HasColumnName("aCocina");
             entity.Property(e => e.Activo)
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("activo");
@@ -138,7 +139,7 @@ public partial class RestaurantContext : DbContext
                 .HasColumnName("created_at");
             entity.Property(e => e.Estado)
                 .HasDefaultValueSql("'abierto'")
-                .HasColumnType("enum('abierto','terminado','cerrado','cancelado')")
+                .HasColumnType("enum('abierto','cerrado')")
                 .HasColumnName("estado");
             entity.Property(e => e.MesaId)
                 .HasColumnType("int(11)")
@@ -150,9 +151,6 @@ public partial class RestaurantContext : DbContext
                 .HasPrecision(10, 2)
                 .HasDefaultValueSql("'0.00'")
                 .HasColumnName("total");
-            entity.Property(e => e.UpdatedAt)
-                .HasColumnType("datetime")
-                .HasColumnName("updated_at");
 
             entity.HasOne(d => d.Mesa).WithMany(p => p.Ticket)
                 .HasForeignKey(d => d.MesaId)
@@ -184,6 +182,12 @@ public partial class RestaurantContext : DbContext
                 .HasDefaultValueSql("'1'")
                 .HasColumnType("int(11)")
                 .HasColumnName("cantidad");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("createdAt");
+            entity.Property(e => e.Estado)
+                .HasColumnType("enum('en preparación','listo')")
+                .HasColumnName("estado");
             entity.Property(e => e.Notas)
                 .HasColumnType("text")
                 .HasColumnName("notas");

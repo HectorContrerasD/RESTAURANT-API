@@ -21,6 +21,10 @@ public partial class TicketItem
 
     public string? Notas { get; set; }
 
+    public DateTime? CreatedAt { get; set; }
+
+    public string? Estado { get; set; }
+
     public virtual Producto Producto { get; set; } = null!;
 
     public virtual Ticket Ticket { get; set; } = null!;
