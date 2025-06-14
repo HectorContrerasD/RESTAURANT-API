@@ -139,111 +139,111 @@ namespace Restaurant.Api.Controllers
             }
 
         }
-        [HttpGet("cerrado")] //Obtiene todos los tickets cerrados (para cocineros)
-        public async Task<IActionResult> GetTicketsCerrados()
-        {
-            try
-            {
-                var tickets = await ticketRepository.GetAllTicketsCerradosAsync();
-                var response = tickets.Select(ticket => new
-                {
-                    ticket.Id,
-                    Mesa = ticket.Mesa != null ? new
-                    {
-                        ticket.Mesa.Id,
-                        ticket.Mesa.Numero,
-                        Disponible = ticket.Mesa.Disponible ?? false
-                    } : null,
-                    Mesero = ticket.Mesero != null ? new
-                    {
-                        ticket.Mesero.Id,
-                        ticket.Mesero.NombreCompleto
-                    } : null,
-                    ticket.Estado,
-                    ticket.Total,
-                    ticket.CreatedAt,
+        //[HttpGet("cerrado")] //Obtiene todos los tickets cerrados (para cocineros)
+        //public async Task<IActionResult> GetTicketsCerrados()
+        //{
+        //    try
+        //    {
+        //        var tickets = await ticketRepository.GetAllTicketsCerradosAsync();
+        //        var response = tickets.Select(ticket => new
+        //        {
+        //            ticket.Id,
+        //            Mesa = ticket.Mesa != null ? new
+        //            {
+        //                ticket.Mesa.Id,
+        //                ticket.Mesa.Numero,
+        //                Disponible = ticket.Mesa.Disponible ?? false
+        //            } : null,
+        //            Mesero = ticket.Mesero != null ? new
+        //            {
+        //                ticket.Mesero.Id,
+        //                ticket.Mesero.NombreCompleto
+        //            } : null,
+        //            ticket.Estado,
+        //            ticket.Total,
+        //            ticket.CreatedAt,
                
-                    TicketItems = ticket.TicketItem.Select(item => new
-                    {
-                        item.Id,
-                        Producto = item.Producto != null ? new
-                        {
-                            item.Producto.Id,
-                            item.Producto.Nombre,
-                            item.Producto.PrecioBase
-                        } : null,
-                        Variante = item.Variante != null ? new
-                        {
-                            item.Variante.Id,
-                            item.Variante.Nombre,
-                            item.Variante.PrecioAdicional
-                        } : null,
-                        item.PrecioUnitario,
-                        item.Cantidad,
+        //            TicketItems = ticket.TicketItem.Select(item => new
+        //            {
+        //                item.Id,
+        //                Producto = item.Producto != null ? new
+        //                {
+        //                    item.Producto.Id,
+        //                    item.Producto.Nombre,
+        //                    item.Producto.PrecioBase
+        //                } : null,
+        //                Variante = item.Variante != null ? new
+        //                {
+        //                    item.Variante.Id,
+        //                    item.Variante.Nombre,
+        //                    item.Variante.PrecioAdicional
+        //                } : null,
+        //                item.PrecioUnitario,
+        //                item.Cantidad,
                       
-                        item.Notas,
-                        item.Subtotal
-                    }).ToList()
-                });
-                return Ok(response);
-            }
-            catch (Exception error)
-            {
-                return Problem(error.Message);
-            }
-        }
-        [HttpGet("cancelado")]
-        public async Task<IActionResult> GetTicketsCancelados() //Obtiene todos los tickets cancelados (para cocineros)
-        {
-            try
-            {
-                var tickets = await ticketRepository.GetAllTicketsCanceladosAsync();
-                var response = tickets.Select(ticket => new
-                {
-                    ticket.Id,
-                    Mesa = ticket.Mesa != null ? new
-                    {
-                        ticket.Mesa.Id,
-                        ticket.Mesa.Numero,
-                        Disponible = ticket.Mesa.Disponible ?? false
-                    } : null,
-                    Mesero = ticket.Mesero != null ? new
-                    {
-                        ticket.Mesero.Id,
-                        ticket.Mesero.NombreCompleto
-                    } : null,
-                    ticket.Estado,
-                    ticket.Total,
-                    ticket.CreatedAt,
+        //                item.Notas,
+        //                item.Subtotal
+        //            }).ToList()
+        //        });
+        //        return Ok(response);
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return Problem(error.Message);
+        //    }
+        //}
+        //[HttpGet("cancelado")]
+        //public async Task<IActionResult> GetTicketsCancelados() //Obtiene todos los tickets cancelados (para cocineros)
+        //{
+        //    try
+        //    {
+        //        var tickets = await ticketRepository.GetAllTicketsCanceladosAsync();
+        //        var response = tickets.Select(ticket => new
+        //        {
+        //            ticket.Id,
+        //            Mesa = ticket.Mesa != null ? new
+        //            {
+        //                ticket.Mesa.Id,
+        //                ticket.Mesa.Numero,
+        //                Disponible = ticket.Mesa.Disponible ?? false
+        //            } : null,
+        //            Mesero = ticket.Mesero != null ? new
+        //            {
+        //                ticket.Mesero.Id,
+        //                ticket.Mesero.NombreCompleto
+        //            } : null,
+        //            ticket.Estado,
+        //            ticket.Total,
+        //            ticket.CreatedAt,
                 
-                    TicketItems = ticket.TicketItem.Select(item => new
-                    {
-                        item.Id,
-                        Producto = item.Producto != null ? new
-                        {
-                            item.Producto.Id,
-                            item.Producto.Nombre,
-                            item.Producto.PrecioBase
-                        } : null,
-                        Variante = item.Variante != null ? new
-                        {
-                            item.Variante.Id,
-                            item.Variante.Nombre,
-                            item.Variante.PrecioAdicional
-                        } : null,
-                        item.PrecioUnitario,
-                        item.Cantidad,
-                        item.Notas,
-                        item.Subtotal
-                    }).ToList()
-                });
-                return Ok(response);
-            }
-            catch (Exception error)
-            {
-                return Problem(error.Message);
-            }
-        }
+        //            TicketItems = ticket.TicketItem.Select(item => new
+        //            {
+        //                item.Id,
+        //                Producto = item.Producto != null ? new
+        //                {
+        //                    item.Producto.Id,
+        //                    item.Producto.Nombre,
+        //                    item.Producto.PrecioBase
+        //                } : null,
+        //                Variante = item.Variante != null ? new
+        //                {
+        //                    item.Variante.Id,
+        //                    item.Variante.Nombre,
+        //                    item.Variante.PrecioAdicional
+        //                } : null,
+        //                item.PrecioUnitario,
+        //                item.Cantidad,
+        //                item.Notas,
+        //                item.Subtotal
+        //            }).ToList()
+        //        });
+        //        return Ok(response);
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return Problem(error.Message);
+        //    }
+        //}
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] TicketPayload ticketPayload) // Crea un nuevo ticket (para mesero)
@@ -261,7 +261,6 @@ namespace Restaurant.Api.Controllers
                     return Unauthorized();
                 }
                 
-
                 var mesa = await mesaRepository.GetMesaByIdAsync((int)ticketPayload.MesaId!);
                 if (mesa == null)
                     return NotFound();
@@ -322,8 +321,8 @@ namespace Restaurant.Api.Controllers
                 Cantidad = cantidad,
                 Notas = item.Notas,
                 Subtotal = subtotal,
-                TicketId = id
-              
+                TicketId = id,
+                CreatedAt = DateTime.UtcNow
             };
             await ticketItemRepository.InsertAsync(ticketItem);
             return ticketItem;
