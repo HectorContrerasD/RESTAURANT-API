@@ -21,18 +21,27 @@ namespace Restaurant.Api.Controllers
                     item.Notas,
                     item.Cantidad,
                     item.CreatedAt,
-                    Producto = item.Producto!= null? new
+                    Ticket = item.Ticket != null ? new
+                    {
+                        item.Ticket.Id,
+                        Mesa = item.Ticket.Mesa != null ? new
+                        {
+                            item.Ticket.Mesa.Numero
+                        }:null,
+                    } : null,
+                   
+                    Producto = item.Producto != null ? new
                     {
                         item.Producto.Id,
                         item.Producto.Nombre
-                    }:null,
-                    Variante = item.Variante!=null? new
+                    } : null,
+                    Variante = item.Variante != null ? new
                     {
                         item.Variante.Id,
                         item.Variante.Nombre
-                     
+
                     } : null
-                });
+                }) ;
 
                 return Ok(response);
             }

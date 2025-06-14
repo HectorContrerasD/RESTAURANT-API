@@ -112,6 +112,7 @@ namespace Restaurant.Api.Controllers
                     TicketItems = ticket.TicketItem.Select(item => new
                     {
                         item.Id,
+                        item.Estado,
                         Producto = item.Producto != null ? new
                         {
                             item.Producto.Id,
@@ -327,7 +328,7 @@ namespace Restaurant.Api.Controllers
             await ticketItemRepository.InsertAsync(ticketItem);
             return ticketItem;
         }
-        [HttpPut("{id}/cerrar")] //para cerrar un ticket (para cocinero)
+        [HttpPut("{id}/cerrar")] //para cerrar un ticket (para mesero)
         public async Task<IActionResult> CloseTicket([FromRoute] int id)
         {
             try
@@ -335,8 +336,10 @@ namespace Restaurant.Api.Controllers
                 var ticket = await ticketRepository.GetTicketByIdAsync(id);
                 if (ticket == null)
                     return NotFound();
-                if (ticket.Estado != Constants.Listo)
-                    return BadRequest("El pedido aun no esta listo");
+                if (ticket.TicketItem.Where(x=>x.Estado != Constants.Listo || x.Estado!=null ).Any())
+                {
+                    return BadRequest("Los pedidos aun no estan listos");
+                }
                 ticket.Estado = Constants.Cerrado;
                
                 var mesa = await mesaRepository.GetMesaByIdAsync(ticket.MesaId);
