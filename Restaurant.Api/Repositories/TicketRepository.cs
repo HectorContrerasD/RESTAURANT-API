@@ -15,13 +15,7 @@ namespace Restaurant.Api.Repositories
             return ticket;
         }
 
-        public async Task<List<Ticket>> GetAllTicketsCerradosAsync()
-        {
-            var tickets = await DbSet.Include(x => x.Mesa).Include(x => x.Mesero)
-                .Include(x => x.TicketItem).ThenInclude(x => x.Producto)
-                .Include(x => x.TicketItem).ThenInclude(x => x.Variante).Where(x=>x.Estado == Constants.Cerrado).ToListAsync();
-            return tickets;
-        }
+        
         public async Task<List<Ticket>> GetAllTicketsAbiertosAsync()
         {
             var tickets = await DbSet.Include(x => x.Mesa).Include(x => x.Mesero)
@@ -29,13 +23,7 @@ namespace Restaurant.Api.Repositories
                 .Include(x => x.TicketItem).ThenInclude(x => x.Variante).Where(x=>x.Estado ==Constants.Abierto).ToListAsync();
             return tickets;
         }
-        public async Task<List<Ticket>> GetAllTicketsCanceladosAsync()
-        {
-            var tickets = await DbSet.Include(x => x.Mesa).Include(x => x.Mesero)
-                .Include(x => x.TicketItem).ThenInclude(x => x.Producto)
-                .Include(x => x.TicketItem).ThenInclude(x => x.Variante).Where(x => x.Estado == Constants.Cancelado).ToListAsync();
-            return tickets;
-        }
+        
         public async Task<List<Ticket>> GetAllTicketsByUserIdAsync(int id)
         {
             var tickets = await DbSet.Include(x => x.Mesa).Include(x => x.Mesero)

@@ -7,11 +7,11 @@ namespace Restaurant.Api.Repositories.Abstractions
     public interface ITicketRepository : IRepository<Ticket>
     {
         public Task<Ticket?> GetTicketByIdAsync(int id);
-        public Task<List<Ticket>> GetAllTicketsCerradosAsync();
+        
 
         public  Task<List<Ticket>> GetAllTicketsAbiertosAsync();
 
-        public Task<List<Ticket>> GetAllTicketsCanceladosAsync();
+        
         public Task<List<Ticket>> GetAllTicketsByUserIdAsync(int id);
     }
 }

@@ -14,76 +14,67 @@ namespace Restaurant.Api.Controllers
 
     public class TicketController(ITicketRepository ticketRepository,
         IVarianteRepository varianteRepository,
-        IMesaRepository mesaRepository, 
-        IProductoRepository productoRepository, 
-        ITicketItemRepository ticketItemRepository, 
+        IMesaRepository mesaRepository,
+        IProductoRepository productoRepository,
+        ITicketItemRepository ticketItemRepository,
         IUserRepository userRepository) : ControllerBase
     {
-        //[Authorize]
-        //[HttpGet("abierto/mesero")] //Obtiene los tickets abiertos del mesero
-        //public async Task<IActionResult> GetOpenTickets()
-        //{
-        //    try
-        //    {
-        //        var userId = User.GetId();
-        //        if (!userId.HasValue)
-        //        {
-        //            return Unauthorized();
-        //        }
-        //        var user = await userRepository.GetUsuarioAsync(userId.Value);
-        //        if (user == null)
-        //        {
-        //            return Unauthorized();
-        //        }
-        //        var tickets = await ticketRepository.GetAllTicketsByUserIdAsync(user.Id);
-        //        var response = tickets.Select(ticket => new
-        //        {
-        //            ticket.Id,
-        //            Mesa = ticket.Mesa != null ? new
-        //            {
-        //                ticket.Mesa.Id,
-        //                ticket.Mesa.Numero,
-        //                Disponible = ticket.Mesa.Disponible ?? false
-        //            } : null,
-        //            Mesero = ticket.Mesero != null ? new
-        //            {
-        //                ticket.Mesero.Id,
-        //                ticket.Mesero.NombreCompleto
-        //            } : null,
-        //            ticket.Estado,
-        //            ticket.Total,
-        //            ticket.CreatedAt,
-        //            ticket.UpdatedAt,
-        //            TicketItems = ticket.TicketItem.Select(item => new
-        //            {
-        //                item.Id,
-        //                Producto = item.Producto != null ? new
-        //                {
-        //                    item.Producto.Id,
-        //                    item.Producto.Nombre,
-        //                    item.Producto.PrecioBase
-        //                } : null,
-        //                Variante = item.Variante != null ? new
-        //                {
-        //                    item.Variante.Id,
-        //                    item.Variante.Nombre,
-        //                    item.Variante.PrecioAdicional
-        //                } : null,
-        //                item.PrecioUnitario,
-        //                item.Cantidad,
-                       
-        //                item.Notas,
-        //                item.Subtotal
-        //            }).ToList()
-        //        });
-        //        return Ok(response);
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTicketByIdAsync([FromRoute] int id)
+        {
+            try
+            {
+                var ticket = await ticketRepository.GetTicketByIdAsync(id);
+                if (ticket == null) { return NotFound(); }
+                var response = new
+                {
+                    ticket.Id,
 
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return Problem(error.Message);
-        //    }
-        //}
+                    Mesa = ticket.Mesa != null ? new
+                    {
+                        ticket.Mesa.Id,
+                        ticket.Mesa.Numero,
+                        Disponible = ticket.Mesa.Disponible ?? false
+                    } : null,
+                    Mesero = ticket.Mesero != null ? new
+                    {
+                        ticket.Mesero.Id,
+                        ticket.Mesero.NombreCompleto
+                    } : null,
+                    ticket.Estado,
+                    ticket.Total,
+                    ticket.CreatedAt,
+
+                    TicketItems = ticket.TicketItem.Select(item => new
+                    {
+                        item.Id,
+                        item.Estado,
+                        Producto = item.Producto != null ? new
+                        {
+                            item.Producto.Id,
+                            item.Producto.Nombre,
+                            item.Producto.PrecioBase
+                        } : null,
+                        Variante = item.Variante != null ? new
+                        {
+                            item.Variante.Id,
+                            item.Variante.Nombre,
+                            item.Variante.PrecioAdicional
+                        } : null,
+                        item.PrecioUnitario,
+                        item.Cantidad,
+
+                        item.Notas,
+                        item.Subtotal
+                    }).ToList()
+                };
+                return Ok(response);
+            }
+            catch (Exception error)
+            {
+                return Problem(error.Message);
+            }
+        }
 
         [HttpGet("abierto")] //Obtiene todos los tickets abiertos (para cocineros)
         public async Task<IActionResult> GetTicketsAbiertos()
