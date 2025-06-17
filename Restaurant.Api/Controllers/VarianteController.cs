@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Api.Repositories.Abstractions;
 
@@ -8,7 +9,8 @@ namespace Restaurant.Api.Controllers
 
     public class VarianteController(IVarianteRepository varianteRepository, IProductoRepository productoRepository) : ControllerBase
     {
-        [HttpGet("producto/{id}")] // obtiene las variantes por el ID del producto (para mesero)
+		[Authorize(Roles = $"{Constants.Mesero}")]
+		[HttpGet("producto/{id}")] // obtiene las variantes por el ID del producto (para mesero)
         public async Task<IActionResult> GetVariantesByProductoAsync([FromRoute] int id)
         {
             try

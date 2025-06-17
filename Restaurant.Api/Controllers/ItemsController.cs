@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Restaurant.Api.Repositories.Abstractions;
@@ -7,7 +8,8 @@ namespace Restaurant.Api.Controllers
 {
     [Route("api/pedido")]
     [ApiController]
-    public class ItemsController(ITicketItemRepository ticketItemRepository) : ControllerBase
+	//[Authorize(Roles = $"{Constants.Cocinero}")]
+	public class ItemsController(ITicketItemRepository ticketItemRepository) : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetTicketItems()

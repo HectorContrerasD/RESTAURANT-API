@@ -9,6 +9,7 @@ namespace Restaurant.Api.Repositories
         public async Task<Ticket?> GetTicketByIdAsync(int id)
         {
             var ticket = await DbSet.Include(x=>x.Mesa).Include(x=>x.Mesero)
+                .Include(x=>x.TicketItem)
                 .Include(x=>x.TicketItem).ThenInclude(x=>x.Producto)
                 .Include(x => x.TicketItem).ThenInclude(x => x.Variante)
                 .FirstOrDefaultAsync(x => x.Id == id);

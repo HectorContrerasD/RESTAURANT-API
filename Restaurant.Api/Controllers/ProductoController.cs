@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Api.Repositories.Abstractions;
 
@@ -8,7 +9,8 @@ namespace Restaurant.Api.Controllers
 
     public class ProductoController(IProductoRepository productoRepository, ICategoriaRepository categoriaRepository) : ControllerBase
     {
-        [HttpGet("{id}")] // obtiene los productos por el ID de la categoria (para mesero)
+		[Authorize(Roles = $"{Constants.Mesero}")]
+		[HttpGet("{id}")] // obtiene los productos por el ID de la categoria (para mesero)
         public async Task<IActionResult> GetPriductosByCategoriaAsync([FromRoute] int id)
         {
             try

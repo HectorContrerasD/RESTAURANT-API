@@ -19,7 +19,8 @@ namespace Restaurant.Api.Controllers
         ITicketItemRepository ticketItemRepository,
         IUserRepository userRepository) : ControllerBase
     {
-        [HttpGet("{id}")]
+		[Authorize(Roles = $"{Constants.Mesero}")]
+		[HttpGet("{id}")]
         public async Task<IActionResult> GetTicketByIdAsync([FromRoute] int id)
         {
             try
@@ -75,8 +76,8 @@ namespace Restaurant.Api.Controllers
                 return Problem(error.Message);
             }
         }
-
-        [HttpGet("abierto")] //Obtiene todos los tickets abiertos (para cocineros)
+        [Authorize(Roles =$"{Constants.Mesero}")]
+        [HttpGet("abierto")] //Obtiene todos los tickets abiertos
         public async Task<IActionResult> GetTicketsAbiertos()
         {
             try
@@ -122,8 +123,8 @@ namespace Restaurant.Api.Controllers
                         item.Notas,
                         item.Subtotal
                     }).ToList()
-                }).OrderBy(x=>x.Mesa);
-                return Ok(response);
+                });
+                return Ok(response.OrderBy(x=>x.Mesa.Numero));
             }
             catch (Exception error)
             {
@@ -236,7 +237,7 @@ namespace Restaurant.Api.Controllers
         //        return Problem(error.Message);
         //    }
         //}
-        [Authorize]
+        [Authorize (Roles = $"{Constants.Mesero}")]
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] TicketPayload ticketPayload) // Crea un nuevo ticket (para mesero)
         {
@@ -319,7 +320,8 @@ namespace Restaurant.Api.Controllers
             await ticketItemRepository.InsertAsync(ticketItem);
             return ticketItem;
         }
-        [HttpPut("{id}/cerrar")] //para cerrar un ticket (para mesero)
+		[Authorize(Roles = $"{Constants.Mesero}")]
+		[HttpPut("{id}/cerrar")] //para cerrar un ticket (para mesero)
         public async Task<IActionResult> CloseTicket([FromRoute] int id)
         {
             try
@@ -327,7 +329,9 @@ namespace Restaurant.Api.Controllers
                 var ticket = await ticketRepository.GetTicketByIdAsync(id);
                 if (ticket == null)
                     return NotFound();
-                if (ticket.TicketItem.Where(x=>x.Estado != Constants.Listo || x.Estado!=null ).Any())
+                var itemsACocina = ticket.TicketItem.Where(x => x.Producto.ACocina == true);
+
+				if (itemsACocina.Where(x=>x.Estado != Constants.Listo).Any())
                 {
                     return BadRequest("Los pedidos aun no estan listos");
                 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Api.Repositories.Abstractions;
 
@@ -8,7 +9,8 @@ namespace Restaurant.Api.Controllers
    
     public class CategoriaController(ICategoriaRepository categoriaRepository) : ControllerBase
     {
-        [HttpGet]// obtiene todas las categorías (para mesero)
+		[Authorize(Roles = $"{Constants.Mesero}")]
+		[HttpGet]// obtiene todas las categorías (para mesero)
         public async Task<IActionResult> GetCategoriasAsync()
         {
             try

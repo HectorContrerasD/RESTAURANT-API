@@ -8,7 +8,7 @@ namespace Restaurant.Api.Repositories
     {
         public async Task<List<Mesa>> GetMesasDisponiblesAsync()
         {
-            var mesas = await DbSet.Where(x => x.Disponible == true).ToListAsync();
+            var mesas = await DbSet.ToListAsync();
             return mesas;
         }
         public async Task<Mesa?> GetMesaByIdAsync(int id)
