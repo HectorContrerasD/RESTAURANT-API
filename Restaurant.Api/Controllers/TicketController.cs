@@ -6,6 +6,7 @@ using Restaurant.Api.Models.Entities;
 using Restaurant.Api.Payloads;
 using Restaurant.Api.Repositories.Abstractions;
 using Restaurant.Api.Repositories.Validators;
+using Restaurant.Api.Services.Abstractions;
 using Restaurant.Api.Services.Utils;
 
 namespace Restaurant.Api.Controllers
@@ -17,7 +18,7 @@ namespace Restaurant.Api.Controllers
         IMesaRepository mesaRepository,
         IProductoRepository productoRepository,
         ITicketItemRepository ticketItemRepository,
-        IUserRepository userRepository) : ControllerBase
+        IUserRepository userRepository, INotificacionService _notificationService) : ControllerBase
     {
 		[Authorize(Roles = $"{Constants.Mesero}")]
 		[HttpGet("{id}")]
@@ -132,111 +133,7 @@ namespace Restaurant.Api.Controllers
             }
 
         }
-        //[HttpGet("cerrado")] //Obtiene todos los tickets cerrados (para cocineros)
-        //public async Task<IActionResult> GetTicketsCerrados()
-        //{
-        //    try
-        //    {
-        //        var tickets = await ticketRepository.GetAllTicketsCerradosAsync();
-        //        var response = tickets.Select(ticket => new
-        //        {
-        //            ticket.Id,
-        //            Mesa = ticket.Mesa != null ? new
-        //            {
-        //                ticket.Mesa.Id,
-        //                ticket.Mesa.Numero,
-        //                Disponible = ticket.Mesa.Disponible ?? false
-        //            } : null,
-        //            Mesero = ticket.Mesero != null ? new
-        //            {
-        //                ticket.Mesero.Id,
-        //                ticket.Mesero.NombreCompleto
-        //            } : null,
-        //            ticket.Estado,
-        //            ticket.Total,
-        //            ticket.CreatedAt,
-               
-        //            TicketItems = ticket.TicketItem.Select(item => new
-        //            {
-        //                item.Id,
-        //                Producto = item.Producto != null ? new
-        //                {
-        //                    item.Producto.Id,
-        //                    item.Producto.Nombre,
-        //                    item.Producto.PrecioBase
-        //                } : null,
-        //                Variante = item.Variante != null ? new
-        //                {
-        //                    item.Variante.Id,
-        //                    item.Variante.Nombre,
-        //                    item.Variante.PrecioAdicional
-        //                } : null,
-        //                item.PrecioUnitario,
-        //                item.Cantidad,
-                      
-        //                item.Notas,
-        //                item.Subtotal
-        //            }).ToList()
-        //        });
-        //        return Ok(response);
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return Problem(error.Message);
-        //    }
-        //}
-        //[HttpGet("cancelado")]
-        //public async Task<IActionResult> GetTicketsCancelados() //Obtiene todos los tickets cancelados (para cocineros)
-        //{
-        //    try
-        //    {
-        //        var tickets = await ticketRepository.GetAllTicketsCanceladosAsync();
-        //        var response = tickets.Select(ticket => new
-        //        {
-        //            ticket.Id,
-        //            Mesa = ticket.Mesa != null ? new
-        //            {
-        //                ticket.Mesa.Id,
-        //                ticket.Mesa.Numero,
-        //                Disponible = ticket.Mesa.Disponible ?? false
-        //            } : null,
-        //            Mesero = ticket.Mesero != null ? new
-        //            {
-        //                ticket.Mesero.Id,
-        //                ticket.Mesero.NombreCompleto
-        //            } : null,
-        //            ticket.Estado,
-        //            ticket.Total,
-        //            ticket.CreatedAt,
-                
-        //            TicketItems = ticket.TicketItem.Select(item => new
-        //            {
-        //                item.Id,
-        //                Producto = item.Producto != null ? new
-        //                {
-        //                    item.Producto.Id,
-        //                    item.Producto.Nombre,
-        //                    item.Producto.PrecioBase
-        //                } : null,
-        //                Variante = item.Variante != null ? new
-        //                {
-        //                    item.Variante.Id,
-        //                    item.Variante.Nombre,
-        //                    item.Variante.PrecioAdicional
-        //                } : null,
-        //                item.PrecioUnitario,
-        //                item.Cantidad,
-        //                item.Notas,
-        //                item.Subtotal
-        //            }).ToList()
-        //        });
-        //        return Ok(response);
-        //    }
-        //    catch (Exception error)
-        //    {
-        //        return Problem(error.Message);
-        //    }
-        //}
+
         [Authorize (Roles = $"{Constants.Mesero}")]
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] TicketPayload ticketPayload) // Crea un nuevo ticket (para mesero)
@@ -283,6 +180,9 @@ namespace Restaurant.Api.Controllers
                 await ticketRepository.UpdateAsync(ticket);
                 mesa.Disponible = false;
                 await mesaRepository.UpdateAsync(mesa);
+                await _notificationService.NotifyTicketCreated(ticket.Id, mesa.Numero);
+                await _notificationService.NotifyMesaAvailabilityChanged(mesa.Id, mesa.Numero, false);
+
                 return Ok(ticket.Id);
             }
             catch (Exception error)
@@ -343,7 +243,10 @@ namespace Restaurant.Api.Controllers
                 mesa.Disponible = true; // Marcar la mesa como disponible
                 await ticketRepository.UpdateAsync(ticket);
                 await mesaRepository.UpdateAsync(mesa);
+                await _notificationService.NotifyTicketClosed(ticket.Id, mesa.Numero);
+                await _notificationService.NotifyMesaAvailabilityChanged(mesa.Id, mesa.Numero, true);
                 return Ok();
+              
             }
             catch (Exception error)
             {

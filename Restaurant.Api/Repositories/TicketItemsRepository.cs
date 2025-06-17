@@ -14,7 +14,7 @@ namespace Restaurant.Api.Repositories
         }
         public async Task<List<TicketItem>> GetAllTicketItems()
         {
-            var ticketItems = await DbSet.Include(x=>x.Ticket).ThenInclude(x=>x.Mesa).Include(x=>x.Variante).Include(x=>x.Producto).OrderBy(x=>x.CreatedAt).Where(x=>x.Producto.ACocina ==true).ToListAsync();
+            var ticketItems = await DbSet.Include(x=>x.Ticket).ThenInclude(x=>x.Mesa).Include(x=>x.Variante).Include(x=>x.Producto).OrderBy(x=>x.CreatedAt).Where(x=>x.Producto.ACocina ==true && x.Estado != Constants.Listo).ToListAsync();
             return ticketItems;
         }
     }

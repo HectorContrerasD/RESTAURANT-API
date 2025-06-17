@@ -11,7 +11,7 @@ namespace Restaurant.Api.Controllers
     {
 		[Authorize(Roles = $"{Constants.Mesero}")]
 		[HttpGet("{id}")] // obtiene los productos por el ID de la categoria (para mesero)
-        public async Task<IActionResult> GetPriductosByCategoriaAsync([FromRoute] int id)
+        public async Task<IActionResult> GetProductosByCategoriaAsync([FromRoute] int id)
         {
             try
             {

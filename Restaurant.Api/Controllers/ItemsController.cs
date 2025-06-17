@@ -3,13 +3,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Restaurant.Api.Repositories.Abstractions;
+using Restaurant.Api.Services;
+using Restaurant.Api.Services.Abstractions;
 
 namespace Restaurant.Api.Controllers
 {
     [Route("api/pedido")]
     [ApiController]
-	//[Authorize(Roles = $"{Constants.Cocinero}")]
-	public class ItemsController(ITicketItemRepository ticketItemRepository) : ControllerBase
+    [Authorize(Roles = $"{Constants.Cocinero}")]
+    public class ItemsController(ITicketItemRepository ticketItemRepository, INotificacionService notificationService) : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetTicketItems()
@@ -23,6 +25,7 @@ namespace Restaurant.Api.Controllers
                     item.Notas,
                     item.Cantidad,
                     item.CreatedAt,
+                    item.Estado,
                     Ticket = item.Ticket != null ? new
                     {
                         item.Ticket.Id,
@@ -61,6 +64,11 @@ namespace Restaurant.Api.Controllers
                 if (item == null) return NotFound();
                 item.Estado = Constants.Preparacion;
                 await ticketItemRepository.UpdateAsync(item);
+                await notificationService.NotifyItemStateChanged(
+                    item.Id,
+                    item.TicketId,
+                    item.Ticket.Mesa.Numero,
+                    Constants.Preparacion);
                 return Ok();
             }
             catch (Exception error)
@@ -77,6 +85,11 @@ namespace Restaurant.Api.Controllers
                 if (item == null) return NotFound();
                 item.Estado = Constants.Listo;
                 await ticketItemRepository.UpdateAsync(item);
+                await notificationService.NotifyItemStateChanged(
+                    item.Id,
+                    item.TicketId,
+                    item.Ticket.Mesa.Numero,
+                    Constants.Listo);
                 return Ok();
             }
             catch (Exception error)

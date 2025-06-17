@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Restaurant.Api.Hubs;
 using Restaurant.Api.Models.Entities;
 using Restaurant.Api.Repositories;
 using Restaurant.Api.Repositories.Abstractions;
@@ -18,7 +19,9 @@ builder.AddRepositories();
 builder.Services.AddCors();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<INotificacionService, NotificacionService>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -32,7 +35,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
 app.MapControllers();
-
+app.MapHub<RestaurantHub>("/restaurantHub");
 app.Run();
 public static class Extensions 
 {
