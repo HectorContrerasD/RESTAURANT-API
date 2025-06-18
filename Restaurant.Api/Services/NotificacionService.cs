@@ -21,16 +21,13 @@ namespace Restaurant.Api.Services
                 Timestamp = DateTime.UtcNow
             };
 
-            // Notificar a cocineros sobre nuevo ticket
-            await hubContext.Clients.Group("Cocineros")
+            await hubContext.Clients.All
                 .SendAsync("TicketCreated", notification);
 
-            // Notificar a meseros sobre cambio en mesa y actualizar lista de tickets
-            await hubContext.Clients.Group("Meseros")
+            await hubContext.Clients.All
                 .SendAsync("MesaOccupied", new { MesaNumero = mesaNumero, TicketId = ticketId });
 
-            // Notificar para actualizar la lista de tickets abiertos
-            await hubContext.Clients.Group("Meseros")
+            await hubContext.Clients.All   
                 .SendAsync("RefreshTicketsList", new { TicketId = ticketId, Action = "Created" });
         }
 
@@ -44,12 +41,10 @@ namespace Restaurant.Api.Services
                 Timestamp = DateTime.UtcNow
             };
 
-            // Notificar a meseros sobre mesa liberada y actualización de lista de tickets
-            await hubContext.Clients.Group("Meseros")
+            await hubContext.Clients.All
                 .SendAsync("TicketClosed", notification);
 
-            // Notificar para actualizar la lista de tickets abiertos
-            await hubContext.Clients.Group("Meseros")
+            await hubContext.Clients.All
                 .SendAsync("RefreshTicketsList", new { TicketId = ticketId });
         }
 
@@ -65,14 +60,12 @@ namespace Restaurant.Api.Services
                 Timestamp = DateTime.UtcNow
             };
 
-            // Notificar a meseros sobre cambios de estado de items
-            await hubContext.Clients.Group("Meseros")
+            await hubContext.Clients.All
                 .SendAsync("ItemStateChanged", notification);
 
-            // Si el item está listo, también notificar a cocineros
             if (newState == Constants.Listo)
             {
-                await hubContext.Clients.Group("Cocineros")
+                await hubContext.Clients.All
                     .SendAsync("ItemCompleted", notification);
             }
         }
@@ -88,8 +81,7 @@ namespace Restaurant.Api.Services
                 Timestamp = DateTime.UtcNow
             };
 
-            // Notificar a meseros sobre cambios en disponibilidad de mesas
-            await hubContext.Clients.Group("Meseros")
+            await hubContext.Clients.All        
                 .SendAsync("MesaAvailabilityChanged", notification);
         }
     }
