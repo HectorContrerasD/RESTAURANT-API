@@ -6,5 +6,7 @@ namespace Restaurant.Api.Repositories.Abstractions
     {
         public Task<List<TicketItem>> GetTicketItemsByTicketIdAsync(int ticketId);
         public Task<List<TicketItem>> GetAllTicketItems();
-    }
+        public Task<TicketItem> GetItemByIdAsync(int id);
+
+	}
 }

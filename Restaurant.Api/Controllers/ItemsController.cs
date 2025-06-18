@@ -60,7 +60,7 @@ namespace Restaurant.Api.Controllers
         {
             try
             {
-                var item = await ticketItemRepository.GetByIdAsync(id);
+                var item = await ticketItemRepository.GetItemByIdAsync(id);
                 if (item == null) return NotFound();
                 item.Estado = Constants.Preparacion;
                 await ticketItemRepository.UpdateAsync(item);
@@ -81,7 +81,7 @@ namespace Restaurant.Api.Controllers
         {
             try
             {
-                var item = await ticketItemRepository.GetByIdAsync(id);
+                var item = await ticketItemRepository.GetItemByIdAsync(id);
                 if (item == null) return NotFound();
                 item.Estado = Constants.Listo;
                 await ticketItemRepository.UpdateAsync(item);
